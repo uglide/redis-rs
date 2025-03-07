@@ -1,0 +1,22 @@
+name: 'Download Redis Module'
+description: 'Download a Redis module based on the provided module name and version'
+inputs:
+  module_name:
+    description: 'The name of the Redis module to download'
+    required: true
+  target_path:
+    description: 'The path to save the downloaded Redis module'
+    required: true
+  module_version:
+    description: 'The version of the Redis module to download'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Download and cache Redis module
+      run: |
+        ubuntu_version=$(lsb_release -rs)
+        cpu_arch=$(uname -m)
+        url="https://redismodules.s3.amazonaws.com/${{ inputs.module_name }}/${{ inputs.module_name }}.Linux-ubuntu${ubuntu_version}-${cpu_arch}.${{ inputs.module_version }}.zip"
+        wget -O ${{ inputs.target_path }} $url
+      shell: bash
