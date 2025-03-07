@@ -126,6 +126,7 @@ jobs:
       run: make test
 
     - name: Download RedisJSON
+      if: steps.cache-redisjson.outputs.cache-hit != 'true' && matrix.config.db-version != '6.2.13'
       uses: ./.github/actions/download-redis-module
       with:
         module_name: rejson-oss
